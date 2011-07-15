@@ -24,6 +24,8 @@
               feeder="video" />
 
       <properties>
+        <property name="is-hdv" type="bool"
+                  _description="Whether the camera output is HDV rather then DV." />
         <property name="height" type="int"
                   _description="The height to scale to." />
         <property name="width" type="int"

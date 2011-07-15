@@ -37,6 +37,7 @@ T_ = gettexter()
 # See comments in gstdvdec.c for details on the dv format.
 
 
+
 class Firewire(feedcomponent.ParseLaunchComponent):
 
     def do_check(self):
@@ -75,12 +76,22 @@ class Firewire(feedcomponent.ParseLaunchComponent):
         if props.get('scaled-width', None) is not None:
             self.warnDeprecatedProperties(['scaled-width'])
 
-        self.is_square = props.get('is-square', False)
+        is_hdv = props.get('is-hdv', False)
+
+        # HDV streams generally have square pixels, while normal DV streams don't.
+        self.is_square = props.get('is-square', is_hdv)
         self.width = props.get('width', 0)
         self.height = props.get('height', 0)
+
         decoder = props.get('decoder', 'dvdec')
         if not self.is_square and not self.height:
-            self.height = int(576 * self.width/720.) # assuming PAL
+            if is_hdv:
+                # HDV we assume 16:9
+                self.height = int(self.width*16/9)
+            else:
+                # DV we assume PAL ratios
+                self.height = int(576 * self.width/720.)
+
         self.add_borders = props.get('add-borders', True)
         guid = "guid=%s" % props.get('guid', 0)
         self.deintMode = props.get('deinterlace-mode', 'auto')
@@ -96,17 +107,30 @@ class Firewire(feedcomponent.ParseLaunchComponent):
         # replace it with videotestsrc of the same size and PAR, so we can
         # unittest the pipeline
         # need a queue in case tcpserversink blocks somehow
-        template = ('dv1394src %s'
-                    '    ! tee name=t'
-                    '    ! queue leaky=2 max-size-time=1000000000'
-                    '    ! dvdemux name=demux'
-                    '  demux. ! queue ! %s name=decoder'
-                    '    ! @feeder:video@'
-                    '  demux. ! queue ! audio/x-raw-int '
-                    '    ! volume name=setvolume'
-                    '    ! level name=volumelevel message=true '
-                    '    ! @feeder:audio@'
-                    '    t. ! queue ! @feeder:dv@' % (guid, decoder))
+        if is_hdv:
+            template = ('hdv1394src %s'
+                        '    ! tee name=t'
+                        '    ! queue leaky=2 max-size-time=1000000000'
+                        '    ! mpegtsdemux name=demux'
+                        '  demux. ! queue ! mpeg2dec name=decoder'
+                        '    ! @feeder:video@'
+                        '  demux. ! queue ! mad ! audio/x-raw-int '
+                        '    ! volume name=setvolume'
+                        '    ! level name=volumelevel message=true '
+                        '    ! @feeder:audio@'
+                        '    t. ! queue ! @feeder:hdv@' % (guid,))
+        else:
+            template = ('dv1394src %s'
+                        '    ! tee name=t'
+                        '    ! queue leaky=2 max-size-time=1000000000'
+                        '    ! dvdemux name=demux'
+                        '  demux. ! queue ! %s name=decoder'
+                        '    ! @feeder:video@'
+                        '  demux. ! queue ! audio/x-raw-int '
+                        '    ! volume name=setvolume'
+                        '    ! level name=volumelevel message=true '
+                        '    ! @feeder:audio@'
+                        '    t. ! queue ! @feeder:dv@' % (guid, decoder))
 
         return template
 
