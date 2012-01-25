@@ -1,0 +1,54 @@
+<registry>
+
+  <components>
+
+    <component type="dvswitch-producer"
+               base="flumotion/component/producers/dvswitch"
+               _description="A producer that produces from named pipe expecting raw DV data">
+      <source location="flumotion.component.producers.dvswitch.dvswitch" />
+      <feeder name="audio" />
+      <feeder name="video" />
+      <feeder name="dv" />
+      <entries>
+        <entry type="component" location="dvswitch.py"
+               function="DVswitchProvider" />
+      </entries>
+      <properties xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:include href="flumotion/component/common/avproducer/properties.xml"/>
+        <property name="path" type="string" required="yes"
+                  _description="The path to the named pipe." />
+      </properties>
+    </component>
+
+  </components>
+
+  <bundles>
+
+    <bundle name="dvswitch-base">
+        <dependencies>
+            <dependency name="component-base" />
+        </dependencies>
+
+        <directories>
+            <directory name="flumotion/component/producers/dvswitch">
+                <filename location="__init__.py" />
+            </directory>
+        </directories>
+    </bundle>
+
+    <bundle name="dvswitch-component">
+        <dependencies>
+            <dependency name="component" />
+            <dependency name="dvswitch-base" />
+        </dependencies>
+
+        <directories>
+            <directory name="flumotion/component/producers/dvswitch">
+                <filename location="dvswitch.py" />
+            </directory>
+        </directories>
+    </bundle>
+
+  </bundles>
+
+</registry>

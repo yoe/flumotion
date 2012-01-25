@@ -25,6 +25,7 @@ SUBDIRS = \
 	webcam \
 	looper \
 	unixdomain \
-	fgdp
+	fgdp \
+	dvswitch
 
 EXTRA_DIST = $(producers_DATA)
