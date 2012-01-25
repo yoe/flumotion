@@ -218,6 +218,7 @@ flumotion/component/producers/videotest/Makefile
 flumotion/component/producers/webcam/Makefile
 flumotion/component/producers/looper/Makefile
 flumotion/component/producers/unixdomain/Makefile
+flumotion/component/producers/dvswitch/Makefile
 flumotion/configure/Makefile
 flumotion/configure/installed.py
 flumotion/configure/uninstalled.py
