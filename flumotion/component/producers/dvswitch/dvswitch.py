@@ -32,7 +32,7 @@ __version__ = "$Rev$"
 class DVswitchProvider(Firewire):
     def get_pipeline_template(self, properties):
         """ return the pipeline """
-        return ('fdsrc name=fdsrc ! tee name=t'
+        return ('fdsrc name=fdsrc ! video/x-dv ! tee name=t'
                 '    ! queue leaky=2 max-size-time=1000000000'
                 '    ! dvdemux name=demux'
                 '  demux. ! queue ! dvdec name=decoder'
