@@ -24,6 +24,8 @@
                   _description="Whether to show a Creative Commons logo." />
         <property name="xiph-logo" type="bool"
                   _description="Whether to show a Xiph logo." />
+	<property name="custom-logo" type="string"
+		  _description="An optional custom logo to show" />
 
         <property name="width" type="int" required="no"
                   _description="Deprecated" />

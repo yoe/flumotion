@@ -36,6 +36,7 @@ def generateOverlay(text,
                     showFlumotion,
                     showCC,
                     showXiph,
+                    customIcon,
                     width, height):
     """Generate an transparent image with text + logotypes rendered on top
     of it suitable for mixing into a video stream
@@ -49,6 +50,8 @@ def generateOverlay(text,
     @type showCC: bool
     @param showXiph: if we should show the xiph logo
     @type showXiph: bool
+    @param customIcon: a custom icon to show
+    @type customIcon: str
     @param width: width of the image to generate
     @type width: int
     @param height: height of the image to generate
@@ -70,6 +73,8 @@ def generateOverlay(text,
     if showFlumotion:
         subImages.append(os.path.join(configure.imagedir, '36x36',
                                       'fluendo.png'))
+    if customIcon is not None:
+        subImages.append(customIcon)
 
     imagesOverflowed = False
 
