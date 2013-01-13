@@ -172,7 +172,7 @@ class Overlay(feedcomponent.ParseLaunchComponent):
         self.showFlumotion=p.get('fluendo-logo', False)
         self.showCC=p.get('cc-logo', False)
         self.showXiph=p.get('xiph-logo', False)
-        self.custom=p.get('custom-logo', None)
+        self.customIcon=p.get('custom-logo', None)
         if p.get('show-text', False):
             self.text = p.get('text', 'set the "text" property')
         else:
